@@ -1,0 +1,169 @@
+<?php
+/**
+ * TEMPLATE FOR ADMIN FUNCTIONS
+ *
+ * @link https://codex.wordpress.org/Template_Hierarchy
+ *
+ * @package finaltheme
+ * @version 1.0
+ */
+
+
+
+function register_final_theme_functions(){
+
+
+/****************************
+FINAL THEME REGISTER MENU   | 
+*****************************/
+register_nav_menu( 'primary', 'Main Menu');
+
+
+
+/****************************
+FINAL THEME SUPPORT OPTIONS |
+*****************************/
+
+//FINAL POST FORMATS
+$args_theme_support = array('aside','gallery','link','image','quote','status','video','audio','status');
+add_theme_support( 'post-formats' , $args_theme_support );
+
+//FINAL POST THUMBNAILS
+add_theme_support('post-thumbnails');
+
+//FINAL CUSTOM BACKGROUND
+add_theme_support('custom-background');
+
+//FINAL CUSTOM HEADER
+add_theme_support( 'custom-header' );
+
+//FINAL CUSTOM LOGO
+add_theme_support( 'custom-logo' );
+
+//FINAL FEED LINKS
+add_theme_support( 'automatic-feed-links' );
+
+//FINAL HTML5 SUPPORT
+$args_html5 = array( 'comment-list', 'comment-form', 'search-form', 'gallery', 'caption' );
+add_theme_support( 'html5', $args_html5  );
+
+//FINAL TITLE TAGS
+add_theme_support( 'title-tag' );
+
+//FINAL WIDGETS
+add_theme_support( 'customize-selective-refresh-widgets' );
+
+}
+
+
+
+add_action('after_setup_theme','register_final_theme_functions');
+
+
+
+
+/****************************
+FINAL REGISTER SIDEBAR 		|
+*****************************/
+
+
+function final_theme_register_right_sidebar(){
+	$args = array(
+		'name'          => __( 'Right Sidebar', 'finaltheme' ),
+		'id'            => 'final-sidebar-right',
+		'description'   => 'Drag and Drop different widgets here',
+		'class'         => 'finalRightSidebar',
+		'before_widget' => '<li id="%1" class="widget %2">',
+		'after_widget'  => '</li>',
+		'before_title'  => '<h2 class="widgettitle">',
+		'after_title'   => '</h2>'
+	);
+
+	register_sidebar( $args );
+
+}
+
+add_action('after_setup_theme','final_theme_register_right_sidebar');
+
+/****************************
+FINAL THEME OPTIONS			|
+*****************************/
+
+function final_theme_options_page(){
+
+add_menu_page( 'Theme Options', 'Theme Options', 'manage_options', 'final_theme_options', 'final_callback_theme_options', 'dashicons-admin-customizer' , 35);
+
+register_setting( 'theme-optios-group', 'first_name');
+add_settings_section( 'final-theme-options', 'Final Theme Options','final_section_theme_options', 'final_theme_options' );
+add_settings_field( 'first-name', 'First Name', 'callback_first_name', 'final_theme_options', 'final-theme-options' );
+
+}
+
+add_action('admin_menu','final_theme_options_page');
+
+
+// CALLBACK FUNCTION FOR THEME OPTIONS.
+
+function final_section_theme_options() {
+	//echo "<h1>  THEME OPTIONS </h1>";
+}
+
+function callback_first_name() {
+	$first_name = get_option('first_name');
+	echo '<input type="text" name="first_name"  value="'.$first_name .'" />';
+}
+
+function final_callback_theme_options(){
+require get_template_directory().'/inc/templates/final_theme_options.php';
+}
+
+
+/****************************
+FINAL THEME LINK COLOR 		|
+****************************
+
+function final_add_link_colors($wp_customize){
+
+$wp_customize->add_setting('final_link_colors', array( 
+	'default' => '#000000', 
+	'transport' => 'refresh',
+));
+
+
+$wp_customize->add_section('final_standard_colors',array(
+	'title' => __('Standard Colors','Final Theme'),
+	'priority' => 30
+));
+
+
+$wp_customize->add_control(new WP_Customize_Color_Control($wp_customize , 'final_link_colors_control', array(
+
+	'label' => __('Link Color', 'Final Theme'),
+	'section' => 'final_standard_colors',
+	'settings' => 'final_link_colors'
+
+)));
+
+
+
+
+}
+
+add_action('customize_register','final_add_link_colors' );
+
+// OUTPUT FOR ABOVE LINK COLOR 
+
+function final_output_link_color_above(){
+	?>
+<style type="text/css">
+	
+a:link,
+a:visited {
+	 color:<?php echo get_theme_mod('final_link_colors'); ?>
+}
+
+</style>
+	<?php 
+}
+
+add_action('wp_head' ,'final_output_link_color_above' );*/
